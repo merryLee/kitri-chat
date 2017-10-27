@@ -24,6 +24,11 @@ public class Login extends JFrame {
 		paper = new Paper();
 		rename = new Rename();
 		
+		ChatService cs = new ChatService(this);
+		nameTf.addActionListener(cs);
+		ok.addActionListener(cs);
+		cancel.addActionListener(cs);
+		
 	}
 	
 	private void initGUI() {
