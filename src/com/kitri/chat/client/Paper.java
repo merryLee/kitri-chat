@@ -1,4 +1,5 @@
 package com.kitri.chat.client;
+
 import java.awt.CardLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;

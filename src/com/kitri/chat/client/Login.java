@@ -25,9 +25,23 @@ public class Login extends JFrame {
 		rename = new Rename();
 		
 		ChatService cs = new ChatService(this);
+		
+//		login창 이벤트 등록
 		nameTf.addActionListener(cs);
 		ok.addActionListener(cs);
 		cancel.addActionListener(cs);
+		
+//		chat창 이벤트 등록
+		chat.globalsend.addActionListener(cs);
+		chat.whomsend.addActionListener(cs);
+		chat.paper.addActionListener(cs);
+		chat.rename.addActionListener(cs);
+		chat.exit.addActionListener(cs);
+		
+//		paper창 이벤트 등록
+		
+//		rename창 이벤트 등록
+		
 		
 	}
 	

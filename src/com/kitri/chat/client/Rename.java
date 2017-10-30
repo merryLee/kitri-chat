@@ -1,4 +1,5 @@
 package com.kitri.chat.client;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;

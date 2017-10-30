@@ -1,4 +1,5 @@
 package com.kitri.chat.client;
+
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -67,9 +68,13 @@ public class Chat extends javax.swing.JFrame implements ListSelectionListener {
 				}
 			}
 			{
-				list = new JList<String>(listData);
-				getContentPane().add(list);				
-				list.setBounds(404, 9, 113, 205);
+				JScrollPane jsp = new JScrollPane();
+				getContentPane().add(jsp);				
+				jsp.setBounds(404, 9, 113, 205);
+				{
+					list = new JList<String>(listData);
+					jsp.setViewportView(list);
+				}
 			}
 			{
 				paper = new JButton();
