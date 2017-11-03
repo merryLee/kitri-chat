@@ -103,10 +103,19 @@ public class ChatServer implements Runnable {
 							
 						}break;
 						case ChatConstance.CS_RENAME :{
-							
+//							500||변경할대화명
+							String tmp = st.nextToken();//변경할대화명.
+							broadcast(ChatConstance.SC_RENAME + "||" + name + "||" + tmp);
+							name = tmp;
 						}break;
 						case ChatConstance.CS_DISCONNECT :{
-							
+//							900||
+							broadcast(ChatConstance.SC_DISCONNECT + "||" + name);
+							vc.remove(this);
+							in.close();
+							out.close();
+							s.close();
+							flag = false;
 						}break;
 					}
 				} catch (IOException e) {

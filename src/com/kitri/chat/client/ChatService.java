@@ -15,6 +15,7 @@ public class ChatService implements Runnable, ActionListener {
 
 	Login login;
 	String myid;
+	Socket s;
 	BufferedReader in;
 	OutputStream out;
 	
@@ -34,12 +35,34 @@ public class ChatService implements Runnable, ActionListener {
 		} else if(obj == login.chat.whomsend) {
 			whomSendProcess();
 		} else if(obj == login.chat.paper) {
-			
+			login.paper.from.setText(myid);
+			login.paper.to.setText(login.chat.list.getSelectedValue());
+			login.paper.setVisible(true);
 		} else if(obj == login.chat.rename) {
-			
+			login.rename.oldname.setText(myid);
+			login.rename.setVisible(true);
 		} else if(obj == login.chat.exit) {
-			
+			closeProcess();
+		} else if(obj == login.rename.newname || obj == login.rename.ok) {
+			renameProcess();
+		} else if(obj == login.rename.cancel) {
+			login.rename.oldname.setText("");
+			login.rename.newname.setText("");
+			login.rename.setVisible(false);
 		}
+	}
+
+	private void renameProcess() {
+		myid = login.rename.newname.getText().trim();
+		send(ChatConstance.CS_RENAME + "||" + myid);
+		login.rename.oldname.setText("");
+		login.rename.newname.setText("");
+		login.rename.setVisible(false);
+	}
+
+	public void closeProcess() {
+		send(ChatConstance.CS_DISCONNECT + "||");//900||
+		login.chat.setVisible(false);
 	}
 
 	private void whomSendProcess() {
@@ -87,7 +110,7 @@ public class ChatService implements Runnable, ActionListener {
 			return;
 		String host = login.ipTf.getText().trim();
 		try {
-			Socket s = new Socket(host, ChatConstance.PORT);
+			s = new Socket(host, ChatConstance.PORT);
 			login.setVisible(false);
 			login.chat.setVisible(true);
 			in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -137,10 +160,35 @@ public class ChatService implements Runnable, ActionListener {
 						
 					}break;
 					case ChatConstance.SC_RENAME :{
-						
+//						500||기존대화명||새대화명
+						String oldid = st.nextToken();
+						String newid = st.nextToken();
+						login.chat.area.append("[알림] " + oldid + "님이 " + newid + "님으로 대화명을 변경하였습니다.\n");
+						login.chat.area.setCaretPosition(login.chat.area.getDocument().getLength());
+						int size = login.chat.listData.size();
+						for (int i = 0; i < size; i++) {
+							String id = login.chat.listData.get(i);
+							if(id.equals(oldid)) {
+								login.chat.listData.set(i, newid);
+								break;
+							}
+						}
+						login.chat.list.setListData(login.chat.listData);
 					}break;
 					case ChatConstance.SC_DISCONNECT :{
-						
+//						900||나가는사람대화명
+						String tmp = st.nextToken();//나가는사람대화명
+						if(tmp.equals(myid)) {//내창
+							in.close();
+							out.close();
+							s.close();
+							System.exit(0);
+						} else {
+							login.chat.listData.remove(tmp);
+							login.chat.list.setListData(login.chat.listData);
+							login.chat.area.append("[알림] " + tmp + "님이 나가셨습니다.\n");
+							login.chat.area.setCaretPosition(login.chat.area.getDocument().getLength());
+						}
 					}break;
 				}
 			} catch (IOException e) {

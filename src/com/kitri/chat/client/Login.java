@@ -1,5 +1,8 @@
 package com.kitri.chat.client;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
@@ -38,10 +41,19 @@ public class Login extends JFrame {
 		chat.rename.addActionListener(cs);
 		chat.exit.addActionListener(cs);
 		
+		chat.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				cs.closeProcess();
+			}
+		});
+		
 //		paper창 이벤트 등록
 		
 //		rename창 이벤트 등록
-		
+		rename.newname.addActionListener(cs);
+		rename.ok.addActionListener(cs);
+		rename.cancel.addActionListener(cs);
 		
 	}
 	
